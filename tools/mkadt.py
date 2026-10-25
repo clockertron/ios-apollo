@@ -33,8 +33,8 @@ PANIC_LOG_SIZE = 0x100000
 # <0x80000000 2G>, <0x1_00000000 0xfcc00000>; every fixed reserved-memory
 # carve-out is in the low bank and the dynamic pools are limited below 4G.
 HIGH_PHYS_BASE = 0x100000000
-# apollo: 4 GiB from 0x1_00000000 (sweet used 0xfcc00000); not yet checked
-# against apollo's /memory node
+# thyme (8 GB): 0x1_00000000..0x2_00000000 is plain System RAM in the live /memory node and iomem,
+# no reserved-memory below 0x2_75600000; low bank unusable (disp_rdump 0xb0400000, hole 0xbbb00000-0xc0000000)
 HIGH_MEM_SIZE = 0x100000000
 # /arm-io children are relative to this; it must not be 0 (serial_init bails)
 SOC_BASE = 0x01000000
