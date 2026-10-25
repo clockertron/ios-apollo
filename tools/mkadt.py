@@ -44,8 +44,8 @@ GICR, GICR_SIZE = 0x17a60000, 0x100000
 # cont_splash_region@9c000000 from live.dts = 0x2300000
 FB, FB_SIZE = 0x9c000000, 0x2300000
 SWEET_ECID = 0x5357454554000001  # 'SWEET' + 1, synthetic
-# Mi 10T 5G 1080x2400, a8r8g8b8
-FB_W, FB_H, FB_STRIDE = 1080, 2400, 1080 * 4
+# Mi 10S 1080x2340, a8r8g8b8
+FB_W, FB_H, FB_STRIDE = 1080, 2340, 1080 * 4
 # Internal UFS host (ufshc@1d84000 "ufs_mem"); QEMU virt has none
 UFS, UFS_SIZE = 0x01d84000, 0x3000
 TIMEBASE = 19200000
@@ -118,8 +118,8 @@ def build(seed=None, qemu=False, highmem=False, touch_fw=None, gmu_fw=None, gpu_
         ('crypto-hash-method', cstr('sha2-384')),
         # MobileGestalt's screen class: display-scale (u32, default 0) comes
         # from /chosen, the pixel size from IOMobileFramebuffer. Scale 0 makes
-        # SpringBoard's FBSDisplayMode "infxinf@0x" invalid. 1080x2400 @3x =
-        # 360x800 points (like iPhone X class devices).
+        # SpringBoard's FBSDisplayMode "infxinf@0x" invalid. 1080x2340 @3x =
+        # 360x780 points (like iPhone X class devices).
         ('display-scale', u32(3)),
         # XNU derives IOPlatformUUID (gethostuuid) from these on arm; without
         # them CFPreferences cannot use kCFPreferencesCurrentHost (no ByHost
