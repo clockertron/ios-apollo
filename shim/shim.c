@@ -104,13 +104,9 @@ static void delay_ms(unsigned ms)
 
 static void __attribute__((noreturn)) reset(unsigned after_s)
 {
+	(void)after_s;
 	con_skip();
-	con_str("RESET", after_s > 20 ? "in 40s" : "in 20s");
-	delay_ms(after_s * 1000);
-	wr32(IMEM_RESTART_REASON, RESTART_BOOTLOADER);
-	__asm__ volatile("dsb sy" ::: "memory");
-	smc(PSCI_SYSTEM_RESET, 0, 0, 0);
-	wr32(PSHOLD, 0);
+	con_str("HALT", "reset disabled");
 	for (;;)
 		__asm__ volatile("wfe");
 }
@@ -378,20 +374,20 @@ void shim_main(uint64_t dtb)
 	/* An xnu payload in the ramdisk means: boot it (MMU stays off). */
 	stage = "loader";
 	con_clear(RED);
-	con_str("SHIM", "sweet milestone 4: xnu loader");
+	con_str("SHIM", "Thyme diagnostic smoke test");
 	con_skip();
+	con_str("HALT", "XNU and UFS disabled");
+	for (;;)
+		__asm__ volatile("wfe");
+
 	const char *why = loader_boot(dtb);
 	con_str("LOADER", why);
 	con_skip();
 
-	/* No payload: probe the internal UFS while the MMU is still off. */
-	stage = "ufs";
-	test_ufs();
-	con_skip();
-	/* Keep the probe results on screen (later tests clear it); reset after 3 min. */
-	con_str("UFS", "probe done, reset in ~3 min");
-	delay_ms(180000);
-	reset(20);
+	/* First Thyme smoke test: halt before UFS/controller access. */
+	con_str("HALT", "UFS probe disabled");
+	for (;;)
+		__asm__ volatile("wfe");
 
 	stage = "fill off";
 	uint64_t fill_off = ticks_fill(RED);
